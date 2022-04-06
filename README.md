@@ -1,7 +1,7 @@
 ## Olá, me chamo Ivan Junior
 - 👀 Meus interesses são em desenvolvimento mobile com Flutter, mais também gosto de back-end e aceito desafios de novas linguagens que não conheço.
 - 🌱 No momento estou estudando e me aperfeiçoando em Flutter
-- 💞️ Desejo coloborar com projetos voltados ao Flutter e outros que forem possíveis colaborar, para aprender cada vez mais
+- 💞️ Desejo colaborar com projetos voltados ao Flutter e outros que forem possíveis colaborar, para aprender cada vez mais
 - 📫 Para falar comigo basta enviar um e-mail para ivanluizjr@hotmail.com
 
 <div align=>
