@@ -4,6 +4,13 @@
 - 💞️ Desejo colaborar com projetos voltados ao Flutter e outros que forem possíveis colaborar.
 - 📫 Para falar comigo basta enviar um e-mail para ivanluizjr@hotmail.com.
 
+
+## Hello, my name is Ivan Junior
+- 👀 I'm a Developer, graduated in Systems Analysis and Development, passionate about mobile development, mainly Flutter.
+- 🌱 My main stack is Flutter, I'm doing a Postgraduate Degree in Mobile Development, to gain knowledge in the native platforms Kotlin for Android and Swift for IOS.
+- 💞️ I want to collaborate with projects aimed at Flutter and others that are possible to collaborate with.
+- 📫 To talk to me, just send an email to ivanluizjr@hotmail.com.
+
 <div align=>
   <a href="https://github.com/ivanluizjr">
   <img height="180em" src="https://github-readme-stats.vercel.app/api?username=ivanluizjr&show_icons=true&theme=radical&include_all_commits=true&count_private=true"/>
