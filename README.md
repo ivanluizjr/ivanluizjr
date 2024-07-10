@@ -1,13 +1,35 @@
 ## Olá, me chamo Ivan Junior
-- 👀 Sou Desenvolvedor, formado em Análise e Desenvolvimento de Sistemas, apaixonado por desenvolvimento mobile, principalmente por Flutter.
-- 🌱 Minha stack principal é Flutter, estou fazendo Pós-Graduação em Desenvolvimento Mobile, para ganhar conhecimento nas plataformas nativas Kotlin para Android e Swift para IOS.
+- 👀 Sou Desenvolvedor, formado em Análise e Desenvolvimento de Sistemas.
+- 🌱 Desenvolvimento de aplicativos móveis híbridos Android e iOS em Flutter/Dart. Experiência em:
+  - Clean Architecture e Clean Code
+  - Design Patterns e Princípios SOLID
+  - Gerenciamento de estado (Bloc, Getx, Mobx, ValueNotifier, ChangeNotifier)
+  - Consumo de APIs (Dio e HTTP)
+  - Integrações com Firebase (Push Notification, Analytics, Crashlytics)
+  - Publicação de apps nas lojas Google Play e App Store
+  - Controle de versão com GitHub e GitLab
+  - Metodologias ágeis (Scrum/Kanban)
+  - Injeção de dependências (Get It, Modular)
+  - Flutter Web
+  - Testes Unitários de Integração e Widgets
 - 💞️ Desejo colaborar com projetos voltados ao Flutter e outros que forem possíveis colaborar.
 - 📫 Para falar comigo basta enviar um e-mail para ivanluizjr@hotmail.com.
 
 
 ## Hello, my name is Ivan Junior
 - 👀 I'm a Developer, graduated in Systems Analysis and Development, passionate about mobile development, mainly Flutter.
-- 🌱 My main stack is Flutter, I'm doing a Postgraduate Degree in Mobile Development, to gain knowledge in the native platforms Kotlin for Android and Swift for IOS.
+- 🌱 Development of hybrid Android and iOS mobile applications in Flutter/Dart. Experience in:
+  - Clean Architecture and Clean Code
+  - Design Patterns and SOLID Principles
+  - State management (Bloc, Getx, Mobx, ValueNotifier, ChangeNotifier)
+  - Consumption of APIs (Dio and HTTP)
+  - Integrations with Firebase (Push Notification, Analytics, Crashlytics)
+  - Publishing apps on Google Play and App Store
+  - Version control with GitHub and GitLab
+  - Agile methodologies (Scrum/Kanban)
+  - Dependency injection (Get It, Modular)
+  - FlutterWeb
+  - Integration Unit Tests and Widgets
 - 💞️ I want to collaborate with projects aimed at Flutter and others that are possible to collaborate with.
 - 📫 To talk to me, just send an email to ivanluizjr@hotmail.com.
 
