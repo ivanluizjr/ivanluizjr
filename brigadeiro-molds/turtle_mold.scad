@@ -1,160 +1,122 @@
 // =====================================================
 // BRIGADEIRO MOLD — TURTLE
-// Parts: base_mold | detail_plate | top_press
+// Ref: MaliLab3D style — animal-shaped walls
+//
+// PART 1: cutter  — tall walls shaped like turtle, no base
+// PART 2: press   — same walls (shorter) + solid top plate
+//                   + raised shell & face details on bottom
 // =====================================================
 
-$fn         = 80;
-mold_d      = 50;
-wall_h      = 18;
-wall_t      = 1.4;
-base_t      = 1.2;
-press_h     = 6;
-handle_h    = 12;
-handle_d    = 14;
-emb_d       = 0.6;
+$fn = 80;
 
-module rounded_cylinder(d, h, r=0.8) {
-    hull() {
-        translate([0,0,r])   cylinder(d=d-2*r, h=h-2*r);
-        translate([0,0,0])   cylinder(d=d,     h=r);
-        translate([0,0,h-r]) cylinder(d=d,     h=r);
-    }
-}
+// --- Parameters ---
+wall_t        = 1.8;   // wall thickness (mm)
+cutter_h      = 20;    // cutter wall height
+press_wall_h  = 9;     // press inner wall height
+top_t         = 2.5;   // press top plate thickness
+detail_h      = 1.2;   // raised detail height on press face
 
 // =====================================================
-// MODULE: turtle_silhouette
-// Round shell + head + 4 flippers + tail
+// 2D TURTLE SILHOUETTE
+// Body + head + 4 flippers + tail
 // =====================================================
-module turtle_silhouette(scale=1) {
-    s = scale;
+module turtle_2d() {
     union() {
-        // Shell (circle)
-        scale([s, s, 1]) circle(r=9, $fn=60);
-        // Head
-        translate([0, 11*s, 0])
-            scale([s, s, 1]) ellipse_shape(3.5, 4);
-        // Front left flipper
-        translate([-9*s, 5*s, 0]) rotate([0,0,140])
-            scale([s,s,1]) flipper_shape();
-        // Front right flipper
-        translate([ 9*s, 5*s, 0]) rotate([0,0,40])
-            mirror([1,0,0]) scale([s,s,1]) flipper_shape();
-        // Back left flipper
-        translate([-8*s, -5*s, 0]) rotate([0,0,220])
-            scale([s,s,1]) flipper_shape();
-        // Back right flipper
-        translate([ 8*s, -5*s, 0]) rotate([0,0,-40])
-            mirror([1,0,0]) scale([s,s,1]) flipper_shape();
-        // Tail
-        translate([0, -11*s, 0])
-            scale([s,s,1]) hull() {
-                circle(r=2, $fn=20);
-                translate([0, -3, 0]) circle(r=0.8, $fn=15);
-            }
+        circle(r=18, $fn=80);                          // body
+        translate([ 0,  22]) circle(r=7,  $fn=50);    // head
+        translate([-21, 10]) circle(r=8,  $fn=50);    // front-left flipper
+        translate([ 21, 10]) circle(r=8,  $fn=50);    // front-right flipper
+        translate([-19,-13]) circle(r=7,  $fn=50);    // back-left flipper
+        translate([ 19,-13]) circle(r=7,  $fn=50);    // back-right flipper
+        translate([ 0, -23]) circle(r=4,  $fn=40);    // tail
     }
 }
 
-module ellipse_shape(rx, ry) {
-    scale([rx, ry, 1]) circle(r=1, $fn=50);
-}
-
-module flipper_shape() {
-    hull() {
-        circle(r=2.2, $fn=20);
-        translate([4, 1, 0])  circle(r=1.2, $fn=20);
-        translate([3, -2, 0]) circle(r=0.8, $fn=15);
-    }
-}
-
-// =====================================================
-// MODULE: turtle_shell_pattern
-// Hexagonal scute pattern on shell
-// =====================================================
-module turtle_shell_pattern(depth=emb_d) {
-    // Central scute
-    translate([0, 0, 0]) hex_scute(3.5, depth);
-    // Ring of 6 scutes
-    for(i=[0:5]) {
-        translate([6*cos(i*60), 6*sin(i*60), 0])
-            hex_scute(2.8, depth);
-    }
-}
-
-module hex_scute(r, depth) {
-    linear_extrude(height=depth+0.1)
-        difference() {
-            circle(r=r, $fn=6);
-            circle(r=r-0.5, $fn=6);
-        }
-}
-
-// =====================================================
-// MODULE: turtle_face
-// =====================================================
-module turtle_face(depth=emb_d) {
-    // Eyes
-    translate([-1.8, 11.5, 0]) cylinder(d=1.8, h=depth+0.1, $fn=25);
-    translate([ 1.8, 11.5, 0]) cylinder(d=1.8, h=depth+0.1, $fn=25);
-    // Eye shine
-    translate([-1.2, 12, 0]) cylinder(d=0.5, h=depth+0.1, $fn=15);
-    translate([ 2.4, 12, 0]) cylinder(d=0.5, h=depth+0.1, $fn=15);
-    // Smile
-    translate([0, 9.5, 0])
-        rotate_extrude(angle=180, $fn=40)
-            translate([2, 0, 0]) circle(r=0.4, $fn=15);
-}
-
-// =====================================================
-// PART 1: BASE MOLD
-// =====================================================
-module base_mold() {
+// 2D wall ring = offset shell minus inner silhouette
+module turtle_wall_2d() {
     difference() {
-        rounded_cylinder(d=mold_d, h=wall_h, r=0.8);
-        translate([0, 0, base_t])
-            cylinder(d=mold_d - 2*wall_t, h=wall_h, $fn=80);
-        // Turtle silhouette recessed
-        translate([0, 0, base_t - emb_d])
-            linear_extrude(height=emb_d + 0.1)
-                turtle_silhouette(scale=1);
-        // Shell pattern
-        translate([0, 0, base_t - emb_d])
-            turtle_shell_pattern();
-        // Face
-        translate([0, 0, base_t - emb_d])
-            turtle_face();
+        offset(r=wall_t) turtle_2d();
+        turtle_2d();
     }
 }
 
 // =====================================================
-// PART 2: DETAIL PLATE
+// SHELL PATTERN — raised line art on press face
 // =====================================================
-module detail_plate() {
-    inner_d = mold_d - 2*wall_t - 0.4;
-    cylinder(d=inner_d, h=base_t, $fn=80);
-    translate([0, 0, base_t]) {
-        linear_extrude(height=emb_d)
-            turtle_silhouette(scale=1);
-        turtle_shell_pattern(depth=emb_d);
-        turtle_face(depth=emb_d);
-    }
-}
-
-// =====================================================
-// PART 3: TOP PRESS
-// =====================================================
-module top_press() {
-    inner_d = mold_d - 2*wall_t - 0.6;
+module shell_lines_2d() {
+    lw = 0.85; // line width
     union() {
-        rounded_cylinder(d=inner_d, h=press_h, r=0.6);
-        translate([0, 0, press_h])
-            rounded_cylinder(d=handle_d, h=handle_h, r=1.5);
-        mirror([0,0,1])
-            translate([0, 0, -emb_d])
-                linear_extrude(height=emb_d)
-                    turtle_silhouette(scale=1);
+        // Central hexagon ring
+        difference() { circle(r=10, $fn=6); circle(r=10-lw, $fn=6); }
+        // 6 surrounding hexagons
+        for(i=[0:5]) {
+            translate([15*cos(i*60+30), 15*sin(i*60+30)])
+                difference() { circle(r=6.5,$fn=6); circle(r=6.5-lw,$fn=6); }
+        }
+        // Radial divider lines between hexagons
+        for(i=[0:5]) {
+            a = i*60+30;
+            hull() {
+                translate([10*cos(a), 10*sin(a)])   circle(r=lw/2, $fn=8);
+                translate([8.5*cos(a), 8.5*sin(a)]) circle(r=lw/2, $fn=8);
+            }
+        }
     }
 }
 
-translate([-60, 0, 0]) base_mold();
-translate([0,  0, 0])  detail_plate();
-translate([60, 0, 0])  top_press();
+// =====================================================
+// FACE DETAILS — raised nubs & smile on press face
+// =====================================================
+module face_details() {
+    h = detail_h + 0.5;
+    // Eyes (round nubs)
+    translate([-4.5, 23, 0]) cylinder(d=3.2, h=h, $fn=25);
+    translate([ 4.5, 23, 0]) cylinder(d=3.2, h=h, $fn=25);
+    // Eye shine dots
+    translate([-3.3, 24.2, 0]) cylinder(d=0.9, h=h+0.3, $fn=15);
+    translate([ 5.7, 24.2, 0]) cylinder(d=0.9, h=h+0.3, $fn=15);
+    // Nose nubs
+    translate([-1.8, 20.5, 0]) cylinder(d=1.6, h=h-0.3, $fn=18);
+    translate([ 1.8, 20.5, 0]) cylinder(d=1.6, h=h-0.3, $fn=18);
+    // Smile — row of tiny cylinders along arc
+    for(a=[-45:9:45]) {
+        translate([5.5*sin(a), 18.5 + 5.5*(cos(a)-1), 0])
+            cylinder(d=1.0, h=h*0.7, $fn=12);
+    }
+}
+
+// =====================================================
+// PART 1: CUTTER
+// Tall animal-shaped walls, open top and bottom
+// =====================================================
+module cutter() {
+    linear_extrude(height=cutter_h)
+        turtle_wall_2d();
+}
+
+// =====================================================
+// PART 2: PRESS
+// Shorter walls + solid top plate + raised details below
+// =====================================================
+module press() {
+    union() {
+        // Walls
+        linear_extrude(height=press_wall_h)
+            turtle_wall_2d();
+        // Solid top plate (acts as handle surface)
+        translate([0, 0, press_wall_h])
+            linear_extrude(height=top_t)
+                offset(r=wall_t) turtle_2d();
+        // Raised shell pattern on bottom face (z=0 upward)
+        linear_extrude(height=detail_h)
+            shell_lines_2d();
+        // Face details
+        face_details();
+    }
+}
+
+// =====================================================
+// DISPLAY — cutter left, press right
+// =====================================================
+translate([-65, 0, 0]) cutter();
+translate([ 65, 0, 0]) press();

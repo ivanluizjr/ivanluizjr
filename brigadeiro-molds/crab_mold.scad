@@ -1,150 +1,153 @@
 // =====================================================
 // BRIGADEIRO MOLD — CRAB
-// Parts: base_mold | detail_plate | top_press
+// PART 1: cutter  — tall animal-shaped walls, no base
+// PART 2: press   — walls + top plate + raised details
 // =====================================================
 
-$fn         = 80;
-mold_d      = 50;
-wall_h      = 18;
-wall_t      = 1.4;
-base_t      = 1.2;
-press_h     = 6;
-handle_h    = 12;
-handle_d    = 14;
-emb_d       = 0.6;
+$fn = 80;
 
-module rounded_cylinder(d, h, r=0.8) {
-    hull() {
-        translate([0,0,r])   cylinder(d=d-2*r, h=h-2*r);
-        translate([0,0,0])   cylinder(d=d,     h=r);
-        translate([0,0,h-r]) cylinder(d=d,     h=r);
-    }
-}
+wall_t        = 1.8;
+cutter_h      = 20;
+press_wall_h  = 9;
+top_t         = 2.5;
+detail_h      = 1.2;
 
 // =====================================================
-// MODULE: crab_silhouette
-// Round body + 2 big claws + 6 legs
+// 2D CRAB SILHOUETTE
+// Round body + 2 big claws + 6 walking legs + eye stalks
 // =====================================================
-module crab_silhouette(scale=1) {
-    s = scale;
+module crab_2d() {
     union() {
-        // Body
-        scale([s*1.05, s*0.85, 1]) circle(r=8, $fn=60);
-        // Left claw
-        translate([-11*s, 2*s, 0]) rotate([0,0,20])
-            scale([s,s,1]) claw_shape();
-        // Right claw
-        translate([11*s, 2*s, 0]) mirror([1,0,0]) rotate([0,0,20])
-            scale([s,s,1]) claw_shape();
-        // 3 legs each side
-        for(i=[0:2]) {
-            angle_l = 130 + i*20;
-            angle_r = 50  - i*20;
-            translate([8*s*cos(angle_l), 8*s*sin(angle_l), 0])
-                rotate([0,0,angle_l-90])
-                    scale([s,s,1]) leg_shape();
-            translate([8*s*cos(angle_r), 8*s*sin(angle_r), 0])
-                rotate([0,0,angle_r-90])
-                    scale([s,s,1]) leg_shape();
-        }
-        // Eyes on stalks
-        translate([-4*s, 7*s, 0]) eye_stalk(s);
-        translate([ 4*s, 7*s, 0]) eye_stalk(s);
-    }
-}
-
-module claw_shape() {
-    hull() {
-        circle(r=2.5, $fn=30);
-        translate([4, 3, 0])  circle(r=1.8, $fn=25);
-        translate([4, -2, 0]) circle(r=1.5, $fn=25);
-    }
-    // Claw gap
-    translate([4, 0.5, 0]) rotate([0,0,10])
+        // Body (slightly wide)
+        scale([1.1, 0.95]) circle(r=16, $fn=80);
+        // LEFT big claw arm
         hull() {
-            circle(r=0.5, $fn=10);
-            translate([2,1,0]) circle(r=0.3, $fn=10);
+            translate([-16, 8])  circle(r=5, $fn=30);
+            translate([-26, 14]) circle(r=4, $fn=30);
         }
-}
-
-module leg_shape() {
-    hull() {
-        circle(r=1, $fn=15);
-        translate([0, 5, 0]) circle(r=0.6, $fn=15);
+        // Left claw pincer upper
+        hull() {
+            translate([-26, 14]) circle(r=4, $fn=30);
+            translate([-33, 20]) circle(r=4.5, $fn=35);
+        }
+        // Left claw pincer lower
+        hull() {
+            translate([-26, 14]) circle(r=3.5, $fn=30);
+            translate([-32,  7]) circle(r=4,   $fn=30);
+        }
+        // RIGHT big claw arm
+        hull() {
+            translate([ 16,  8]) circle(r=5, $fn=30);
+            translate([ 26, 14]) circle(r=4, $fn=30);
+        }
+        hull() {
+            translate([26, 14]) circle(r=4, $fn=30);
+            translate([33, 20]) circle(r=4.5, $fn=35);
+        }
+        hull() {
+            translate([26, 14]) circle(r=3.5, $fn=30);
+            translate([32,  7]) circle(r=4,   $fn=30);
+        }
+        // 3 walking legs each side
+        for(i=[0:2]) {
+            offset_y = -2 - i*7;
+            // Left legs
+            hull() {
+                translate([-16, offset_y])      circle(r=3.5, $fn=20);
+                translate([-26, offset_y-5])    circle(r=2.5, $fn=20);
+            }
+            hull() {
+                translate([-26, offset_y-5])    circle(r=2.5, $fn=20);
+                translate([-30, offset_y-12])   circle(r=2,   $fn=20);
+            }
+            // Right legs
+            hull() {
+                translate([ 16, offset_y])      circle(r=3.5, $fn=20);
+                translate([ 26, offset_y-5])    circle(r=2.5, $fn=20);
+            }
+            hull() {
+                translate([ 26, offset_y-5])    circle(r=2.5, $fn=20);
+                translate([ 30, offset_y-12])   circle(r=2,   $fn=20);
+            }
+        }
+        // Eye stalks
+        hull() {
+            translate([-7, 15]) circle(r=3, $fn=20);
+            translate([-9, 22]) circle(r=4, $fn=25);
+        }
+        hull() {
+            translate([ 7, 15]) circle(r=3, $fn=20);
+            translate([ 9, 22]) circle(r=4, $fn=25);
+        }
     }
 }
 
-module eye_stalk(s) {
-    // Stalk
-    hull() {
-        circle(r=0.8*s, $fn=15);
-        translate([0, 2.5*s, 0]) circle(r=0.8*s, $fn=15);
-    }
-    // Eye ball
-    translate([0, 3.5*s, 0]) circle(r=1.8*s, $fn=25);
-}
-
-// =====================================================
-// MODULE: crab_face
-// =====================================================
-module crab_face(depth=emb_d) {
-    // Eyes (filled pupils)
-    translate([-4, 9.5, 0]) cylinder(d=1.2, h=depth+0.1, $fn=20);
-    translate([ 4, 9.5, 0]) cylinder(d=1.2, h=depth+0.1, $fn=20);
-    // Smile
-    translate([0, -1, 0])
-        rotate_extrude(angle=160, $fn=40)
-            translate([3.5, 0, 0]) circle(r=0.5, $fn=20);
-    // Bubble cheeks
-    translate([-5.5, 0, 0]) cylinder(d=2, h=depth+0.1, $fn=20);
-    translate([ 5.5, 0, 0]) cylinder(d=2, h=depth+0.1, $fn=20);
-}
-
-// =====================================================
-// PART 1: BASE MOLD
-// =====================================================
-module base_mold() {
+module crab_wall_2d() {
     difference() {
-        rounded_cylinder(d=mold_d, h=wall_h, r=0.8);
-        translate([0, 0, base_t])
-            cylinder(d=mold_d - 2*wall_t, h=wall_h, $fn=80);
-        translate([0, -1, base_t - emb_d])
-            linear_extrude(height=emb_d + 0.1)
-                crab_silhouette(scale=1);
-        translate([0, -1, base_t - emb_d])
-            crab_face();
+        offset(r=wall_t) crab_2d();
+        crab_2d();
     }
 }
 
 // =====================================================
-// PART 2: DETAIL PLATE
+// CRAB FACE & BODY DETAILS
 // =====================================================
-module detail_plate() {
-    inner_d = mold_d - 2*wall_t - 0.4;
-    cylinder(d=inner_d, h=base_t, $fn=80);
-    translate([0, -1, base_t])
-        linear_extrude(height=emb_d)
-            crab_silhouette(scale=1);
-    translate([0, -1, base_t])
-        crab_face(depth=emb_d);
+module crab_details() {
+    h = detail_h + 0.5;
+    // Eyes on stalks (raised round nubs)
+    translate([-9, 22, 0]) cylinder(d=5, h=h, $fn=30);
+    translate([ 9, 22, 0]) cylinder(d=5, h=h, $fn=30);
+    // Pupils
+    translate([-9, 22, 0]) cylinder(d=2.5, h=h+0.4, $fn=20);
+    translate([ 9, 22, 0]) cylinder(d=2.5, h=h+0.4, $fn=20);
+    // Eye shine
+    translate([-7.5, 23.2, 0]) cylinder(d=0.9, h=h+0.7, $fn=12);
+    translate([ 10.5, 23.2, 0]) cylinder(d=0.9, h=h+0.7, $fn=12);
+    // Smile
+    for(a=[-50:10:50]) {
+        translate([6*sin(a), -4 + 6*(cos(a)-1), 0])
+            cylinder(d=1.0, h=h*0.7, $fn=12);
+    }
+    // Blush cheeks
+    translate([-11,  2, 0]) cylinder(d=5, h=h*0.4, $fn=30);
+    translate([ 11,  2, 0]) cylinder(d=5, h=h*0.4, $fn=30);
+    // Shell segment lines on body
+    for(a=[-30:15:30]) {
+        for(r=[6,11]) {
+            translate([r*sin(a), r*cos(a)-5, 0])
+                cylinder(d=1.0, h=h*0.4, $fn=10);
+        }
+    }
+    // Claw opening lines
+    translate([-29, 13, 0]) rotate([0,0,-20])
+        linear_extrude(height=h*0.5)
+            hull() { circle(r=0.6,$fn=8); translate([5,1]) circle(r=0.4,$fn=8); }
+    translate([ 29, 13, 0]) rotate([0,0,20]) mirror([1,0,0])
+        linear_extrude(height=h*0.5)
+            hull() { circle(r=0.6,$fn=8); translate([5,1]) circle(r=0.4,$fn=8); }
 }
 
 // =====================================================
-// PART 3: TOP PRESS
+// PART 1: CUTTER
 // =====================================================
-module top_press() {
-    inner_d = mold_d - 2*wall_t - 0.6;
+module cutter() {
+    linear_extrude(height=cutter_h)
+        crab_wall_2d();
+}
+
+// =====================================================
+// PART 2: PRESS
+// =====================================================
+module press() {
     union() {
-        rounded_cylinder(d=inner_d, h=press_h, r=0.6);
-        translate([0, 0, press_h])
-            rounded_cylinder(d=handle_d, h=handle_h, r=1.5);
-        mirror([0,0,1])
-            translate([0, -1, -emb_d])
-                linear_extrude(height=emb_d)
-                    crab_silhouette(scale=1);
+        linear_extrude(height=press_wall_h)
+            crab_wall_2d();
+        translate([0, 0, press_wall_h])
+            linear_extrude(height=top_t)
+                offset(r=wall_t) crab_2d();
+        crab_details();
     }
 }
 
-translate([-60, 0, 0]) base_mold();
-translate([0,  0, 0])  detail_plate();
-translate([60, 0, 0])  top_press();
+translate([-90, 0, 0]) cutter();
+translate([ 90, 0, 0]) press();
