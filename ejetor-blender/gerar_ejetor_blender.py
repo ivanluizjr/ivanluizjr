@@ -67,9 +67,12 @@ def limpar_cena() -> None:
     """Remove todos os objetos e dados órfãos da cena."""
     bpy.ops.object.select_all(action="SELECT")
     bpy.ops.object.delete(use_global=True)
-    for blk in list(bpy.data.meshes):    bpy.data.meshes.remove(blk)
-    for blk in list(bpy.data.curves):   bpy.data.curves.remove(blk)
-    for blk in list(bpy.data.materials): bpy.data.materials.remove(blk)
+    for blk in list(bpy.data.meshes):
+        bpy.data.meshes.remove(blk)
+    for blk in list(bpy.data.curves):
+        bpy.data.curves.remove(blk)
+    for blk in list(bpy.data.materials):
+        bpy.data.materials.remove(blk)
 
 
 def importar_svg(caminho: str) -> bpy.types.Object:
@@ -112,7 +115,7 @@ def importar_svg(caminho: str) -> bpy.types.Object:
     return obj
 
 
-def escalar_para(obj: bpy.types.Object,
+def escalar_para_dimensoes(obj: bpy.types.Object,
                  largura_m: float,
                  comprimento_m: float) -> None:
     """
@@ -207,7 +210,7 @@ def main() -> None:
     print("[1/4] Importando contorno externo e criando corpo principal...")
     corpo = importar_svg(CAMINHO_SVG)
     corpo.name = "corpo_principal"
-    escalar_para(corpo, mm(LARGURA_MM), mm(COMPRIMENTO_MM))
+    escalar_para_dimensoes(corpo, mm(LARGURA_MM), mm(COMPRIMENTO_MM))
     converter_e_extrudar(corpo, mm(ALTURA_CORPO_MM))
     # Corpo: z=0 até z=ALTURA_CORPO_MM (28 mm)
 
@@ -215,7 +218,7 @@ def main() -> None:
     print("[2/4] Importando contorno para relevo do carimbo...")
     relevo = importar_svg(CAMINHO_SVG)
     relevo.name = "relevo_carimbo"
-    escalar_para(
+    escalar_para_dimensoes(
         relevo,
         mm(LARGURA_MM      * ESCALA_RELEVO),
         mm(COMPRIMENTO_MM  * ESCALA_RELEVO),
