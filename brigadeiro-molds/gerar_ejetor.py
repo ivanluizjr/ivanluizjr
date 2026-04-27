@@ -37,14 +37,14 @@ import textwrap
 # ─────────────────────────────────────────────
 PARAMS = {
     "fn":             80,     # resolução de curvas
-    "barrel_od":      34.0,   # diâmetro externo do barril
+    "barrel_od":      34.0,   # diâmetro externo do barril (configurável)
     "wall_t":          2.0,   # espessura de parede do barril
     "barrel_h":       60.0,   # altura do barril
     "nozzle_h":        5.0,   # altura da zona de bocal
     "nozzle_d":       20.0,   # diâmetro da abertura do bocal
     "grip_n":          4,     # número de ranhuras de preensão
     "grip_depth":      1.5,   # profundidade de cada ranhura
-    "grip_w":          4.0,   # largura (ângulo) de cada ranhura, em mm
+    "grip_w":          4.0,   # largura linear de cada ranhura (mm, eixo y do sphere)
     "clearance":       0.3,   # folga entre êmbolo e barril
     "handle_d":       40.0,   # diâmetro do cabo do êmbolo
     "handle_t":        4.0,   # espessura do cabo
